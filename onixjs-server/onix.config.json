@@ -1,5 +1,6 @@
 {
     "apps": [
-        "TodoApp@todo.app"
+        "TodoApp@todo.app",
+        "PongApp@pong.app"
     ]
 }
