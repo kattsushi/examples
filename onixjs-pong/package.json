@@ -1,0 +1,35 @@
+{
+  "name": "pingpong-multiplayer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "paddle.js",
+  "scripts": {
+    "start": "gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kattsushi/pong-onixjs-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kattsushi/pong-onixjs-example/issues"
+  },
+  "homepage": "https://github.com/kattsushi/pong-onixjs-example#readme",
+  "dependencies": {
+    "@onixjs/sdk": "^1.0.0-alpha.4.1",
+    "babel-core": "^6.26.0",
+    "babelify": "^8.0.0",
+    "browser-sync": "^2.23.6",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "p5": "^0.6.0",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
+    "watchify": "^3.11.0"
+  },
+  "devDependencies": {
+    "browserify": "^16.1.1"
+  }
+}
