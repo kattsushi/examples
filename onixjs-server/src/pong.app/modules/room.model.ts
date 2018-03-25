@@ -37,20 +37,4 @@ export class RoomModel implements IModel {
     type: Array,
     required: true
   }) players: Array<PlayerModel>;
-  @Property({
-    type: Number,
-    required: true
-  }) positionY: Number;
-  @Property({
-    type: Number,
-    required: true
-  }) positionX: Number;
-  @Property({
-    type: Number,
-    required: true
-  }) speedY: Number;
-  @Property({
-    type: Number,
-    required: true
-  }) speedX: Number;
 }

@@ -23,13 +23,5 @@ export class PlayerModel implements IModel {
   @Property({
     type: String,
     required: true
-  }) text: String;
-  @Property({
-    type: Number,
-    required: true
-  }) positionY: Number;
-  @Property({
-    type: Number,
-    required: true
-  }) score: Number;
+  }) name: String;
 }

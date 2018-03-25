@@ -26,6 +26,7 @@ export class PongService {
   @Inject.Model(RoomModel) private roomModel: Model<RoomModel>;
   // @Inject.Model(PlayerModel) private playerModel: Model<PlayerModel>;
   
+  
   /**
    * @method createRoom
    * @param Room
