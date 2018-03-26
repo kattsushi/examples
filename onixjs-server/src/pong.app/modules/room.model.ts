@@ -24,17 +24,13 @@ export class RoomModel implements IModel {
   @Property({
     type: String,
     required: true
-  }) text: String;
-  @Property({
-    type: String,
-    required: true
   }) name: String;
   @Property({
     type: Boolean,
-    required: true
+    required: false
   }) blocked: Boolean;
   @Property({
     type: Array,
-    required: true
+    required: false
   }) players: Array<PlayerModel>;
 }

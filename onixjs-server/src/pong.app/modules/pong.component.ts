@@ -1,6 +1,7 @@
 import { IComponent, Inject, Component, RPC, Stream } from '@onixjs/core';
 import { PongService } from './pong.service';
 import { EventEmitter } from 'events';
+import { RoomModel } from './room.model';
 /**
  * @class PongComponent
  * @author Andres Jimenez
@@ -45,8 +46,37 @@ export class PongComponent implements IComponent {
     // You can also use Mongo/Redis PubSub instead of Emmiters
     this.emmiter.setMaxListeners(0);
   }
+    /**
+   * @method addRoom
+   * @param room
+   * @returns Promise<RoomModel>
+   * @description Example method of how to expose through
+   * RPC methods that internally might add business logic
+   * or database/services calls.
+   */
+  @RPC()
+  async addRoom(room: RoomModel): Promise<RoomModel> {
+    const result = await this.service.createRoom(room);
+    this.emmiter.emit('onCreate', result);
+    return result;
+  }
   /**
-   * @method getPuck
+   * @method removeRoom
+   * @param room
+   * @returns Promise<RoomModel>
+   * @description Example method of how to expose through
+   * RPC methods that internally might add business logic
+   * or database/services calls.
+   */
+  @RPC()
+  async removeRoom(room: RoomModel): Promise<RoomModel> {
+    console.log(room);
+    const result = await this.service.removeRoom(room);
+    this.emmiter.emit('onRemove', result);
+    return result;
+  }
+  /**
+   * @method listRooms
    * @param room
    * @returns Promise<TodoModel>
    * @description Example of endpoint listing rooms, this will
