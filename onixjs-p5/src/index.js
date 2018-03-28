@@ -50,51 +50,6 @@ async setupSdk() {
       throw todoApp;
     }
   }
-  setRooms() {
-    this.newRoomInput = this.createInput();
-    this.newRoomInput.position(this.height / 2, 290 );
-    this.addButtonRoom = this.createButton('Add new Room');
-    this.addButtonRoom.mouseClicked(() => this.addRoom());
-    this.addButtonRoom.position(this.newRoomInput.x + this.newRoomInput.width, 290);
-  }
-
-  /**
-   * @method addRoom
-   * @description Uses the component reference to call the addTodo remote method.
-   * It will create a new todo on the database.
-   */
-  async addRoom() {
-    // if (this.rooms.lenght <= 5 ) {
-      await this.componentRef.Method('addRoom').call({ name: this.newRoomInput.value() });
-      this.newRoomInput.value('');
-    // }
-  }
-  /**
-   * @method removeTodo
-   * @description Uses the component reference to call the removeTodo remote method.
-   * It will remove a given todo from the database.
-   */
-  async deleteRoom(room) {
-    console.log(room);
-    await this.componentRef.Method('removeRoom').call(room);
-    this.rooms = this.rooms.filter((e) => e !== room);
-  }
-  /**
-   * @method listRoom
-   * @description Uses the component reference to call the addTodo remote method.
-   * It will create a new todo on the database.
-   */
-  listRoom(e) {
-    const room = this.createElement('h2', e.name);
-    room.position(this.newRoomInput.x, this.newRoomInput.y + 20);
-    room.style('color: white');
-
-    const buttonDelete = this.createButton('delete room');
-    buttonDelete.mouseClicked(() => {
-      this.deleteRoom(e);
-    });
-    buttonDelete.position(room.x + 290, room.y);
-  }
 
   preload() {
     this.sdk = new OnixClient({
@@ -112,8 +67,6 @@ async setupSdk() {
     var canvas = this.createCanvas(this.windowWidth, 500);
     var x = (this.windowWidth - this.width) / 2;
     var y = (this.windowHeight - this.height) / 2;
-    canvas.parent('pong');
-    this.setRooms();
     puck = new Puck(this);
     left = new Paddle(true, this);
     right = new Paddle(false, this);
@@ -127,16 +80,16 @@ async setupSdk() {
     this.background(0);
     puck.checkPaddleRight(right);
     puck.checkPaddleLeft(left);
-  
+    puck.update();
+    puck.edges(this);
+    puck.show(this);
+    
     left.show(this);
     right.show(this);
     left.update(this);
     right.update(this);
-    puck.update();
-    puck.edges(this);
     let rightScore = puck.getScoreRight();
     let leftScore = puck.getScoreLeft(this);
-    puck.show(this);
   
     this.fill(255);
     this.textSize(32);
