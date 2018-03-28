@@ -1,9 +1,8 @@
 const p5 = require('p5');
 require("p5/lib/addons/p5.dom");
-const {OnixClient, AppReference} = require('@onixjs/sdk');
-const {Browser} = require('@onixjs/sdk/dist/core/browser.adapters');
 const {Paddle} = require('./paddle');
 const {Puck} = require('./puck');
+// const {Service} = require('./service');
 
 let puck, left, right, ding;
 /**
@@ -25,49 +24,19 @@ class Pong extends p5 {
     this.keyReleased = this.keyReleased.bind(this);
     this.keyPressed = this.keyPressed.bind(this);
   }
-/**
- * @method setupSdk
- * 
- * @memberof Pong
- */
-async setupSdk() {
-    // Initialize the SDK
-    await this.sdk.init();
-    // Create an Application Reference
-    const todoApp = await this.sdk.AppReference('PongApp');
-    // Verify we got a valid AppReference, else throw the error.
-    if (todoApp instanceof AppReference) {
-      // Create Component Reference
-      this.componentRef = todoApp.Module('PongModule').Component('PongComponent');
-      // Create a listTodos stream reference
-      this.componentRef.Method('listRooms').stream((rooms) => {
-        this.rooms = rooms;
-        this.rooms.forEach((e) => {
-          this.listRoom(e);
-        });
-      });
-    } else {
-      throw todoApp;
-    }
-  }
 
   preload() {
-    this.sdk = new OnixClient({
-      host: 'http://127.0.0.1',
-      port: 3000,
-      adapters: {
-        http: Browser.HTTP,
-        websocket: Browser.WebSocket
-      }
-    });
-    this.setupSdk();
+    // this.sdk = new Service();
+    // this.sdk.setup();
   }
 
-  setup() {
+  async setup() {
     var canvas = this.createCanvas(this.windowWidth, 500);
     var x = (this.windowWidth - this.width) / 2;
     var y = (this.windowHeight - this.height) / 2;
     puck = new Puck(this);
+    await puck.setup();
+    puck.reset(this);
     left = new Paddle(true, this);
     right = new Paddle(false, this);
   }
@@ -76,25 +45,27 @@ async setupSdk() {
     this.resizeCanvas(this.windowWidth + 10, 500);
   }
   
-  draw() {
+  async draw() {
     this.background(0);
-    puck.checkPaddleRight(right);
-    puck.checkPaddleLeft(left);
-    puck.update();
-    puck.edges(this);
-    puck.show(this);
+    if (puck.componentRef) {
+      puck.show(this);
+      await puck.update();
+      await puck.checkPaddleRight(right);
+      await puck.checkPaddleLeft(left);
+      puck.edges(this);
+
+      left.show(this);
+      right.show(this);
+      left.update(this);
+      right.update(this);
+      let rightScore = puck.getScoreRight();
+      let leftScore = puck.getScoreLeft(this);
     
-    left.show(this);
-    right.show(this);
-    left.update(this);
-    right.update(this);
-    let rightScore = puck.getScoreRight();
-    let leftScore = puck.getScoreLeft(this);
-  
-    this.fill(255);
-    this.textSize(32);
-    this.text(leftScore, 32, 40);
-    this.text(rightScore, this.width - 64, 40);
+      this.fill(255);
+      this.textSize(32);
+      this.text(leftScore, 32, 40);
+      this.text(rightScore, this.width - 64, 40);
+    }
   }
   keyReleased() {
     left.move(0);
