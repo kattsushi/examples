@@ -1,7 +1,7 @@
 import { IComponent, Inject, Component, RPC, Stream } from '@onixjs/core';
 import { PongService } from './pong.service';
 import { EventEmitter } from 'events';
-import { RoomModel } from './room.model';
+// import { RoomModel } from './room.model';
 /**
  * @class PongComponent
  * @author Andres Jimenez
@@ -44,36 +44,21 @@ export class PongComponent implements IComponent {
     // Some emmiters won't require a max number of listeners
     // Others will. That is up to you and your infrastructure.
     // You can also use Mongo/Redis PubSub instead of Emmiters
-    this.emmiter.setMaxListeners(0);
+    this.emmiter.setMaxListeners(10);
   }
     /**
-   * @method addRoom
-   * @param room
+   * @method updatePuck
+   * @param puck
    * @returns Promise<RoomModel>
    * @description Example method of how to expose through
    * RPC methods that internally might add business logic
    * or database/services calls.
    */
-  @RPC()
-  async addRoom(room: RoomModel): Promise<RoomModel> {
-    const result = await this.service.createRoom(room);
-    this.emmiter.emit('onCreate', result);
-    return result;
-  }
-  /**
-   * @method removeRoom
-   * @param room
-   * @returns Promise<RoomModel>
-   * @description Example method of how to expose through
-   * RPC methods that internally might add business logic
-   * or database/services calls.
-   */
-  @RPC()
-  async removeRoom(room: RoomModel): Promise<RoomModel> {
-    console.log(room);
-    const result = await this.service.removeRoom(room);
-    this.emmiter.emit('onRemove', result);
-    return result;
+  @RPC()git 
+  updatePuck(puck: any) {
+    this.service.puck = puck;
+    this.emmiter.emit('onUpdate', puck);
+    return new Promise(resolve => resolve(puck));
   }
   /**
    * @method listRooms
@@ -84,13 +69,11 @@ export class PongComponent implements IComponent {
    * on every created or removed room.
    */
   @Stream()
-  async listRooms(stream) {
+  async getPuck(stream) {
     // Publish initial stream
     this.publish(stream);
     // Publish on create todos
-    this.emmiter.on('onCreate', () => this.publish(stream));
-    // Publish on remove todos
-    this.emmiter.on('onRemove', () => this.publish(stream))
+    this.emmiter.on('onUpdate', () => this.publish(stream));
   }
   /**
    * @method publish
@@ -99,25 +82,7 @@ export class PongComponent implements IComponent {
    * to the given stream instance.
    */
   private async publish(stream) {
-    const room: any[] = await this.service.findRoom();
-    stream(room);
+    const puck: any =  this.service.puck;
+    stream(puck);
   }
-  /**
-   * @method onCreate
-   * @param room
-   * @description Example method of how to implement the
-   * pub-sub pattern. Clients will subscribe to this stream
-   * and receive each new created todo.
-   */
-  @Stream()
-  onCreate(stream: (todo: any) => void) {
-    this.emmiter.on('onCreate', (todo: any) => stream(todo));
-  }
-  /**
-   * @method destroy
-   * @param room
-   * @description Destroy method will be executed before terminating
-   * an application process.
-   */
-  destroy() { }
 }

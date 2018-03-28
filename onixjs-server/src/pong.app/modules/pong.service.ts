@@ -14,6 +14,7 @@ import { RoomModel } from './room.model';
  */
 @Service()
 export class PongService {
+  puck: {y: number; x: number; r: number; xspeed: number; yspeed: number} = {x: 0, y: 0, r: 12, xspeed: 0, yspeed: 0};
   /**
    * @property model
    * @description This is a dependency injection example.
