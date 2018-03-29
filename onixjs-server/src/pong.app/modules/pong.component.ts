@@ -54,7 +54,7 @@ export class PongComponent implements IComponent {
    * RPC methods that internally might add business logic
    * or database/services calls.
    */
-  @RPC()git 
+  @RPC()
   updatePuck(puck: any) {
     this.service.puck = puck;
     this.emmiter.emit('onUpdate', puck);
