@@ -85,4 +85,11 @@ export class PongComponent implements IComponent {
     const puck: any =  this.service.puck;
     stream(puck);
   }
+    /**
+   * @method destroy
+   * @param todo
+   * @description Destroy method will be executed before terminating
+   * an application process.
+   */
+  destroy() { }
 }

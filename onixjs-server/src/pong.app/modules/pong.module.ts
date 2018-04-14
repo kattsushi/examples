@@ -1,6 +1,6 @@
-import {Module} from '@onixjs/core';
-import {PongComponent} from './pong.component';
-import {PongService} from './pong.service';
+import { Module } from '@onixjs/core';
+import { PongComponent } from './pong.component';
+import { PongService } from './pong.service';
 import { PlayerModel } from './player.model';
 import { RoomModel } from './room.model';
 /**
@@ -14,6 +14,7 @@ import { RoomModel } from './room.model';
   models: [PlayerModel, RoomModel],
   services: [PongService],
   components: [PongComponent],
+  renderers: [],
   lifecycle: async (app, metadata, method): Promise<any> => {
     // before call
     const result = await method();

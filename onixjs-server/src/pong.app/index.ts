@@ -1,4 +1,4 @@
-import {Application, MicroService} from '@onixjs/core';
+import {Application, SOAService} from '@onixjs/core';
 import {PongModule} from './modules/pong.module';
 /**
  * @class PongApp
@@ -7,7 +7,7 @@ import {PongModule} from './modules/pong.module';
  * @description This example app is used as example
  * and for testing purposes. It imports a TodoModule.
  */
-@MicroService({
+@SOAService({
   host: '127.0.0.1',
   port: 8081,
   modules: [PongModule],
