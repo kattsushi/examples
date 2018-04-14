@@ -1,5 +1,5 @@
 import {Mongoose, Schema} from 'mongoose';
-import {IDataSource, DataSource, IModel} from '@onixjs/core';
+import {IDataSource, DataSource, Constructor, OnixMessage} from '@onixjs/core';
 /**
  * @class MongooseDatasource
  * @author Jonathan Casarrubias
@@ -19,9 +19,12 @@ export class MongooseDatasource implements IDataSource {
    * @description This method should connect the mongoose ORM
    * as described in their documentation
    */
-  async connect(): Promise<Mongoose> {
-    return this.mongoose.connect(
+  connect() {
+    this.mongoose.connect(
       'mongodb://lb-sdk-test:lb-sdk-test@ds153400.mlab.com:53400/heroku_pmkjxjwz',
+    ).then(
+      () => console.log('Mongo DB Connection Ready...'),
+      console.error
     );
   }
   /**
@@ -29,8 +32,11 @@ export class MongooseDatasource implements IDataSource {
    * @description This method should disconnect the mongoose ORM
    * as described in their documentation
    */
-  async disconnect(): Promise<void> {
-    return this.mongoose.disconnect();
+  disconnect() {
+    this.mongoose.disconnect().then(
+      () => console.log('Mongo DB Disconnected'),
+      console.error
+    );
   }
   /**
    * @method method
@@ -40,7 +46,7 @@ export class MongooseDatasource implements IDataSource {
    * a JSON schema and a model name in order to get a mongoose
    * model instance.
    */
-  register(name: string, model: IModel, schema: Schema): any {
-    return this.mongoose.model(name, schema);
+  register(Class: Constructor, model: OnixMessage, schema: Schema): any {
+    return this.mongoose.model(Class.name, schema);
   }
 }
